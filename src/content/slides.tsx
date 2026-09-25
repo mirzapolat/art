@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import FlowField from "@/components/card/flow-field";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Accent } from "@/lib/palette";
 
@@ -82,21 +81,14 @@ export function createSlides(t: Dictionary["slides"]): Slide[] {
       id: "contact",
       title: t.contact.title,
       accent: "ink",
-      tone: "dark",
       mono: true,
       content: (
-        <div className="relative flex h-full items-center justify-center p-[7cqw] text-center">
-          <FlowField className="absolute inset-0 size-full" />
-          {/* Dark centre keeps the email clear of the particle lines. */}
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(55%_38%_at_50%_50%,rgba(22,22,22,0.9),rgba(22,22,22,0.5)_60%,transparent)]"
-          />
+        <div className="flex h-full items-center justify-center p-[7cqw] text-center">
           {EMAIL && (
             <a
               href={`mailto:${EMAIL}`}
               onClick={(e) => e.stopPropagation()}
-              className="relative text-[5.2cqw] leading-none font-normal tracking-[-0.01em] whitespace-nowrap text-card underline decoration-card/50 decoration-[0.4cqw] underline-offset-[1.6cqw] transition-[text-decoration-thickness,text-decoration-color] duration-300 hover:decoration-card hover:decoration-[0.8cqw] focus-visible:outline-1 focus-visible:outline-offset-[1.5cqw] focus-visible:outline-card/70 focus-visible:outline-dashed"
+              className="text-[5.2cqw] leading-none font-normal tracking-[-0.01em] whitespace-nowrap text-ink underline decoration-ink/30 decoration-[0.3cqw] underline-offset-[1.6cqw] transition-[text-decoration-thickness,text-decoration-color] duration-300 hover:decoration-ink hover:decoration-[0.5cqw] focus-visible:outline-1 focus-visible:outline-offset-[1.5cqw] focus-visible:outline-ink/50 focus-visible:outline-dashed"
             >
               {EMAIL}
             </a>

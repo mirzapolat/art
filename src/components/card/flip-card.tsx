@@ -3,7 +3,6 @@ import { motion, useMotionTemplate, useSpring, useTransform, type MotionValue } 
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { cn, mod } from "@/lib/utils";
-import { FaceVisibleContext } from "@/components/card/face-context";
 import type { Slide } from "@/content/slides";
 import { HURRY } from "@/hooks/use-deck";
 
@@ -120,7 +119,7 @@ export default function FlipCard({ step, seconds, rush, current, previous, onNex
                 slide.tone === "dark" ? "bg-ink text-card" : "bg-card text-ink",
               )}
             >
-              <FaceVisibleContext.Provider value={visible}>{slide.content}</FaceVisibleContext.Provider>
+              {slide.content}
               <motion.div
                 aria-hidden
                 className="pointer-events-none absolute inset-0"
