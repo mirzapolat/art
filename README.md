@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mirza Polat — artistic business card
 
-## Getting Started
+A single-page, 3D business card: a floating card over a Bauhaus still-life.
+Click, scroll, swipe or use the arrow keys to turn it; each turn shows the next slide.
 
-First, run the development server:
+Next.js (static export) · React Three Fiber · GSAP · Motion · Tailwind CSS · Jost variable font.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000 — the dev server is much slower than the real build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Languages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The site is German and English, at `/de/` and `/en/` (each pre-rendered with its own
+`<html lang>`, description and hreflang links). `/` sends visitors to the language
+of their browser, or to the one they last picked with the switcher (top right).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All text lives in `src/i18n/dictionaries.ts`. The English dictionary defines the
+shape, so a missing German translation is a type error.
 
-## Learn More
+## Edit the slides
 
-To learn more about Next.js, take a look at the following resources:
+The layout of each slide lives in `src/content/slides.tsx`; its text comes from the
+dictionaries. Each slide has an `accent` (colours the disc behind the card) and an
+optional `tone: "dark"`. Sizes inside a slide use `cqw` so they scale with the card.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Publish
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+SITE_URL=https://your-domain.com npm run build   # writes a fully static site to out/
+```
 
-## Deploy on Vercel
+`SITE_URL` makes the canonical and hreflang links absolute. Upload the contents of
+`out/` to any static host.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Where things live
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Path | What |
+| --- | --- |
+| `src/components/experience.tsx` | Page layout: card, menu, controls, intro and nudge animations |
+| `src/components/card/flip-card.tsx` | The two-sided card: tilt, glare, turn animation |
+| `src/components/scene.tsx` | The 3D background |
+| `src/components/ripple.tsx` | The wave distortion that nudges visitors to click |
+| `src/components/slide-menu.tsx` | Bottom-left title carousel / menu |
+| `src/hooks/use-deck.ts` | Slide navigation with a turn queue |
+| `src/lib/stage.ts` | Pointer + wave state shared with the 3D scene |
+| `src/i18n/` | Languages, detection, dictionaries, per-language metadata |
+| `src/app/[lang]/` | The page, once per language · `src/app/(detect)/` the `/` redirect |

@@ -1,0 +1,33 @@
+# art — single self-hosted container serving the static site.
+# Fronted by an external Traefik instance (TLS + routing managed outside this project).
+# Compose reads the local .env file automatically.
+#
+#   cp .env.example .env   # fill in your values
+#   docker compose up -d --build
+
+services:
+  art:
+    build:
+      context: .
+      args:
+        # Inlined into the HTML at build time; changing them needs --build.
+        SITE_URL: ${SITE_URL:-https://mirzapolat.com}
+        NEXT_PUBLIC_CONTACT_EMAIL: ${NEXT_PUBLIC_CONTACT_EMAIL:?set NEXT_PUBLIC_CONTACT_EMAIL in .env}
+    image: art
+    expose:
+      - "3000"
+    networks:
+      - home
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.art.rule: "Host(`mirzapolat.com`)"
+      traefik.http.routers.art.entrypoints: websecure
+      traefik.http.routers.art.tls.certresolver: letsencrypt
+      traefik.http.routers.art.middlewares: secure-headers@file,compress@file
+      traefik.http.services.art.loadbalancer.server.port: "3000"
+    restart: unless-stopped
+
+# Joins the existing Traefik network (created/managed outside this project).
+networks:
+  home:
+    external: true
