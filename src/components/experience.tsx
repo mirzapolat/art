@@ -32,6 +32,9 @@ const Scene = dynamic(() => import("@/components/scene"), { ssr: false });
  */
 const SHOW_CORNERS = false;
 
+/** The flipping card in the middle. Set to `true` to bring it back. */
+const SHOW_CARD = false;
+
 
 export default function Experience({ initialLocale }: { initialLocale: Locale }) {
   const root = useRef<HTMLDivElement>(null);
@@ -65,7 +68,7 @@ export default function Experience({ initialLocale }: { initialLocale: Locale })
   const nudgeRef = useRef<HTMLDivElement>(null);
   const engaged = deck.step !== 0;
   useEffect(() => {
-    if (calm || engaged) return;
+    if (!SHOW_CARD || calm || engaged) return;
     const nudge = () => {
       emitWave();
       gsap.fromTo(
@@ -90,8 +93,8 @@ export default function Experience({ initialLocale }: { initialLocale: Locale })
     () => {
       if (calm) return;
       const intro = gsap.timeline({ defaults: { ease: "expo.out" } })
-        .from(".intro-line", { scaleX: 0, duration: 1.6, stagger: 0.1, ease: "expo.inOut" })
-        .from(".intro-card", { y: 160, rotationX: 55, opacity: 0, duration: 1.8 }, 0.35);
+        .from(".intro-line", { scaleX: 0, duration: 1.6, stagger: 0.1, ease: "expo.inOut" });
+      if (SHOW_CARD) intro.from(".intro-card", { y: 160, rotationX: 55, opacity: 0, duration: 1.8 }, 0.35);
       if (SHOW_CORNERS) intro.from(".intro-hud", { y: 16, opacity: 0, duration: 1.1, stagger: 0.08 }, 0.9);
     },
     { scope: root },
@@ -116,6 +119,7 @@ export default function Experience({ initialLocale }: { initialLocale: Locale })
       />
 
       {/* The card */}
+      {SHOW_CARD && (
       <div
         className="relative z-10 flex h-full items-center justify-center"
         style={{ perspective: 1600 }}
@@ -158,6 +162,7 @@ export default function Experience({ initialLocale }: { initialLocale: Locale })
           />
         </div>
       </div>
+      )}
 
       {/* HUD */}
       {SHOW_CORNERS && (
